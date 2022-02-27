@@ -1,0 +1,45 @@
+        /// <summary>
+        /// Unity Editor Array Serializer, use this code on any EDITOR GUI EVENT.
+        /// </summary>
+        /// <param name="type">Array</param>
+        /// <typeparam name="T"></typeparam>
+        public void ArrayField<T>(ref T[] type) where T : Object
+        {
+            // setup add and remove button
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Add "+typeof(T).Name))
+            {
+                Array.Resize(ref type, type.Length + 1);
+            }
+            if (GUILayout.Button("Remove "+ typeof(T).Name))
+            {
+                Array.Resize(ref type, Mathf.Max(0,type.Length - 1));
+            }
+            GUILayout.EndHorizontal();
+
+            
+            if (type.Length == 0) return;
+            
+            // after array get's some member
+
+            GUILayout.BeginVertical(@someStyle or nothing); 
+
+            GUIStyle style = new GUIStyle(EditorStyles.label);
+            style.alignment = TextAnchor.MiddleCenter;
+
+            for (int i = 0; i < type.Length; i++)
+            {
+                GUILayout.BeginHorizontal();
+                var x = EditorGUILayout.ObjectField(type[i], typeof(T), true); // array member to dynamic object field
+
+                type[i] = x as T; // safe cast x to Type
+
+                if (type[i] != null) // add component logo when array member not null
+                {
+                    GUILayout.Label(EditorGUIUtility.ObjectContent(type[i], type[i].GetType()).image, style,
+                        GUILayout.Width(20), GUILayout.Height(20));
+                }
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndVertical();
+        }
