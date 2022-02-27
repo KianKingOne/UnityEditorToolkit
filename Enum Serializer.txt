@@ -1,0 +1,15 @@
+        /// <summary>
+        /// Enum Toolbar Serializer
+        /// </summary>
+        /// <param name="type"></param>
+        /// <typeparam name="T"></typeparam>
+        public void EnumToolbarField<T>(ref T type) where T : Enum
+        {
+            var n = type.ToString();
+
+            int S = (int) Enum.Parse(type.GetType(), n);
+            
+            S = GUILayout.Toolbar(S, Enum.GetNames(type.GetType()));
+
+            type = (T) Enum.ToObject(type.GetType(), S);
+        }
